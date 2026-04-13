@@ -1,5 +1,7 @@
 # Bookmark Saver
 
+![Cover](./cover.png)
+
 A minimal, modern bookmark manager built with Next.js, Tailwind CSS, Drizzle ORM, and Supabase.
 
 Save and delete your favorite URLs in a clean, centered UI — no clutter, no filters, just your bookmarks.
