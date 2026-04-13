@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bookmark Saver
+
+A minimal, modern bookmark manager built with Next.js, Tailwind CSS, Drizzle ORM, and Supabase.
+
+Save and delete your favorite URLs in a clean, centered UI — no clutter, no filters, just your bookmarks.
+
+---
+
+## Tech Stack
+
+- **Next.js 16** — React framework with App Router and Server Actions
+- **Tailwind CSS 4** — Utility-first styling
+- **Drizzle ORM** — Type-safe SQL query builder
+- **Supabase** — Hosted PostgreSQL database
+- **postgres.js** — PostgreSQL driver
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repo
+
+```bash
+git clone <your-repo-url>
+cd bookmark-saver
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Set up environment variables
+
+Create a `.env` file in the root:
+
+```env
+# App runtime — Transaction pooler (port 6543)
+DATABASE_URL="postgresql://postgres.<project-ref>:<password>@aws-1-<region>.pooler.supabase.com:6543/postgres"
+
+# Migrations only — Session pooler (port 5432)
+DATABASE_MIGRATION_URL="postgresql://postgres.<project-ref>:<password>@aws-1-<region>.pooler.supabase.com:5432/postgres"
+```
+
+You can find both connection strings in your Supabase Dashboard under:
+**Project Settings → Database → Connection string**
+
+> Use port `6543` (Transaction mode) for `DATABASE_URL` and port `5432` (Session mode) for `DATABASE_MIGRATION_URL`.
+
+### 4. Push the database schema
+
+This creates the `bookmarks` table in your Supabase database:
+
+```bash
+npx drizzle-kit push
+```
+
+### 5. (Optional) Seed the database
+
+Populate the database with sample bookmarks:
+
+```bash
+npm run db:seed
+```
+
+### 6. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+├── app/
+│   ├── actions.ts          # Server Actions (getBookmarks, addBookmark, deleteBookmark)
+│   ├── bookmarks-client.tsx # Interactive UI component
+│   ├── page.tsx            # Server component — fetches and passes bookmarks
+│   ├── layout.tsx
+│   └── globals.css
+├── drizzle/
+│   ├── schema.ts           # Database schema definition
+│   └── seed.ts             # Database seeder
+├── lib/
+│   └── db.ts               # Drizzle client instance
+├── drizzle.config.ts       # Drizzle Kit configuration
+└── .env                    # Environment variables (gitignored)
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Available Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Script | Description |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start the production server |
+| `npm run db:seed` | Seed the database with sample bookmarks |
+| `npx drizzle-kit push` | Push schema changes to the database |
